@@ -57,7 +57,10 @@ export async function verifyRegisterOtp(payload: {
   phone?: string;
   otp: string;
 }) {
-  const { data } = await apiClient.post<{ token: string; user: AuthUser }>("/auth/verify-register-otp", payload);
+  const { data } = await apiClient.post<
+    | { token: string; user: AuthUser }
+    | { message: string; status: "pending_admin_approval" }
+  >("/auth/verify-register-otp", payload);
   return data;
 }
 

@@ -54,8 +54,16 @@ export default function LoginPage() {
   const verifyOtpMutation = useMutation({
     mutationFn: () => verifyRegisterOtp({ ...registerData, otp: otpCode }),
     onSuccess: (data) => {
-      setAuth(data.token, data.user);
-      router.push("/dashboard");
+      if ("token" in data) {
+        setAuth(data.token, data.user);
+        router.push("/dashboard");
+        return;
+      }
+
+      setOtpStep(false);
+      setOtpCode("");
+      setMode("login");
+      setSuccess(data.message || "Muellim muracietiniz admin tesdiqine gonderildi.");
     },
     onError: () => {
       setError("OTP yanlisdir ve ya vaxti bitib.");

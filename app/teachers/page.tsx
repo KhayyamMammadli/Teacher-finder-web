@@ -18,7 +18,7 @@ export default async function TeachersPage({
   const params = await searchParams;
   const query = new URLSearchParams();
 
-  for (const key of ["subject", "location", "minPrice", "maxPrice", "rating", "lat", "lng"]) {
+  for (const key of ["subject", "location", "minPrice", "maxPrice", "rating", "lat", "lng", "radiusKm"]) {
     const value = params[key];
     if (typeof value === "string" && value.length) {
       query.set(key, value);
@@ -33,12 +33,19 @@ export default async function TeachersPage({
     }
   }
 
+  if (query.get("lat") && query.get("lng") && !query.get("radiusKm")) {
+    query.set("radiusKm", "10");
+  }
+
   const { items, total } = await serverGetTeachers(query);
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
       <h1 className="text-3xl font-bold">Muellim siyahisi</h1>
       <p className="mt-2 text-sm text-[var(--ink-soft)]">{total} muellim tapildi</p>
+      {query.get("lat") && query.get("lng") && (
+        <p className="mt-1 text-xs text-[var(--ink-soft)]">Yaxinliqdaki (10 km) muellimler siyahida once gosterilir.</p>
+      )}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[280px_1fr]">
         <aside className="card h-max">
