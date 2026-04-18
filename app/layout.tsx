@@ -17,15 +17,15 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: {
-    default: "TeacherFinder | Tutors in Azerbaijan",
+    default: "TeacherFinder | Azerbaycanda muellim axtar",
     template: "%s | TeacherFinder",
   },
   description:
-    "Find the right teacher by subject, rating, price, and location. Compare tutor profiles and book quickly.",
+    "Fenn, qiymet, reytinq ve lokasiyaya gore muellim tapin. Profilleri muqayise edin ve tez rezerv edin.",
   openGraph: {
     title: "TeacherFinder",
     description:
-      "Find the right teacher by subject, rating, price, and location. Compare tutor profiles and book quickly.",
+      "Fenn, qiymet, reytinq ve lokasiyaya gore muellim tapin. Profilleri muqayise edin ve tez rezerv edin.",
     type: "website",
     locale: "az_AZ",
   },
@@ -38,7 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="az"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-[var(--paper)] text-[var(--ink)]">
@@ -47,7 +47,7 @@ export default function RootLayout({
             <SiteHeader />
             <div className="flex-1">{children}</div>
             <footer className="border-t border-black/10 px-4 py-8 text-center text-sm text-[var(--ink-soft)] sm:px-6">
-              TeacherFinder - SEO traffic to booking conversion platform.
+              TeacherFinder - SEO trafiki rezervasiya cevirmesine yonelen platforma.
             </footer>
           </div>
         </Providers>

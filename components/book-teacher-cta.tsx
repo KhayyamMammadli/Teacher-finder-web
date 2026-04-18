@@ -21,10 +21,10 @@ export function BookTeacherCta({ teacherId }: { teacherId: string }) {
 
   return (
     <div className="card space-y-3">
-      <h3 className="text-xl font-semibold">Ders bron et</h3>
+      <h3 className="text-xl font-semibold">Dersi rezerv et</h3>
       {!user ? (
         <p className="text-sm text-[var(--ink-soft)]">
-          Rezerv ucun evvelce <Link href="/login" className="underline">login</Link> edin.
+          Rezervasiya ucun evvelce <Link href="/login" className="underline">daxil olun</Link>.
         </p>
       ) : (
         <>
@@ -40,10 +40,10 @@ export function BookTeacherCta({ teacherId }: { teacherId: string }) {
             onClick={() => mutation.mutate()}
             disabled={mutation.isPending}
           >
-            {mutation.isPending ? "Gonderilir..." : "Book dars"}
+            {mutation.isPending ? "Gonderilir..." : "Rezerv et"}
           </button>
-          {mutation.isSuccess && <p className="text-sm text-green-700">Booking gonderildi.</p>}
-          {mutation.isError && <p className="text-sm text-red-700">Booking ugursuz oldu.</p>}
+          {mutation.isSuccess && <p className="text-sm text-green-700">Rezervasiya gonderildi.</p>}
+          {mutation.isError && <p className="text-sm text-red-700">Rezervasiya ugursuz oldu.</p>}
         </>
       )}
       <a href={whatsappLink} className="btn-secondary block text-center" target="_blank" rel="noreferrer">

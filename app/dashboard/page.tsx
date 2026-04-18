@@ -37,18 +37,18 @@ export default function DashboardPage() {
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <h1 className="text-3xl font-bold">Idare paneli</h1>
       <p className="mt-2 text-sm text-[var(--ink-soft)]">
-        {user?.role === "teacher" ? "Incoming requests" : "Booking history"}
+        {user?.role === "teacher" ? "Gelen muracietler" : "Rezervasiya tarixcesi"}
       </p>
 
       <section className="mt-6 space-y-3">
         {bookingQuery.data?.map((booking) => (
           <article key={booking.id} className="card flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-semibold">Booking #{booking.id}</p>
+              <p className="text-sm font-semibold">Rezerv #{booking.id}</p>
               <p className="text-sm text-[var(--ink-soft)]">Status: {booking.status}</p>
-              {booking.note && <p className="text-sm text-[var(--ink-soft)]">Note: {booking.note}</p>}
+              {booking.note && <p className="text-sm text-[var(--ink-soft)]">Qeyd: {booking.note}</p>}
             </div>
 
             {user?.role === "teacher" && booking.status === "pending" && (
@@ -58,22 +58,22 @@ export default function DashboardPage() {
                   type="button"
                   onClick={() => statusMutation.mutate({ id: booking.id, status: "accepted" })}
                 >
-                  Accept
+                  Qebul et
                 </button>
                 <button
                   className="btn-secondary"
                   type="button"
                   onClick={() => statusMutation.mutate({ id: booking.id, status: "rejected" })}
                 >
-                  Reject
+                  Legv et
                 </button>
               </div>
             )}
           </article>
         ))}
 
-        {bookingQuery.isLoading && <p>Loading bookings...</p>}
-        {bookingQuery.isError && <p>Could not load bookings.</p>}
+        {bookingQuery.isLoading && <p>Rezervasiyalar yuklenir...</p>}
+        {bookingQuery.isError && <p>Rezervasiyalar yuklenmedi.</p>}
       </section>
     </main>
   );

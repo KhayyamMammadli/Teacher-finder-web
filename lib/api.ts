@@ -42,6 +42,25 @@ export async function register(payload: {
   return data;
 }
 
+export async function sendRegisterOtp(email: string) {
+  const { data } = await apiClient.post<{ message: string; devOtp?: string }>("/auth/send-register-otp", {
+    email,
+  });
+  return data;
+}
+
+export async function verifyRegisterOtp(payload: {
+  name: string;
+  email: string;
+  password: string;
+  role: "student" | "teacher";
+  phone?: string;
+  otp: string;
+}) {
+  const { data } = await apiClient.post<{ token: string; user: AuthUser }>("/auth/verify-register-otp", payload);
+  return data;
+}
+
 export async function becomeTeacher(payload: {
   name: string;
   subjects: string[];

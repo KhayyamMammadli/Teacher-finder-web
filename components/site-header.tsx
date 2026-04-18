@@ -22,14 +22,14 @@ export function SiteHeader() {
           <Link href="/become-teacher">Muellim ol</Link>
           {ready && user ? (
             <>
-              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/dashboard">Panel</Link>
               <Link href="/profile">Profil</Link>
               <button type="button" onClick={clearAuth} className="rounded-full border px-3 py-1">
-                Cixis
+                Cixis et
               </button>
             </>
           ) : (
-            <Link href="/login">Login</Link>
+            <Link href="/login">Daxil ol</Link>
           )}
         </nav>
       </div>

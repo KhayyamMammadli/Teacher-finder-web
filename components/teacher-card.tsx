@@ -21,11 +21,11 @@ export function TeacherCard({ teacher }: { teacher: Teacher }) {
           {teacher.subject} - {teacher.location}
         </p>
         <div className="flex items-center justify-between text-sm">
-          <span>Rating {teacher.rating.toFixed(1)}</span>
+          <span>Reytinq {teacher.rating.toFixed(1)}</span>
           <span className="font-semibold">{teacher.price} AZN / saat</span>
         </div>
         {typeof teacher.distanceKm === "number" && (
-          <p className="text-xs text-[var(--ink-soft)]">Approx distance: {teacher.distanceKm} km</p>
+          <p className="text-xs text-[var(--ink-soft)]">Mesafe: {teacher.distanceKm} km</p>
         )}
       </div>
 
@@ -33,7 +33,7 @@ export function TeacherCard({ teacher }: { teacher: Teacher }) {
         href={`/teachers/${teacher.id}`}
         className="mt-4 inline-flex rounded-full bg-[var(--ink)] px-4 py-2 text-sm font-semibold text-white"
       >
-        View profile
+        Profili ac
       </Link>
     </article>
   );

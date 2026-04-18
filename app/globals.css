@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f6efe4;
-  --foreground: #172126;
-  --paper: #fffdf8;
-  --ink: #14232d;
-  --ink-soft: #5a6770;
-  --brand: #f26522;
-  --brand-strong: #c24511;
+  --background: #f4f6fb;
+  --foreground: #111827;
+  --paper: #ffffff;
+  --ink: #102033;
+  --ink-soft: #546174;
+  --brand: #0ea5e9;
+  --brand-strong: #0284c7;
+  --accent: #f97316;
 }
 
 @theme inline {
@@ -18,6 +19,7 @@
   --color-ink-soft: var(--ink-soft);
   --color-brand: var(--brand);
   --color-brand-strong: var(--brand-strong);
+  --color-accent: var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -25,33 +27,45 @@
 body {
   background: var(--background);
   color: var(--ink);
+  background-image:
+    radial-gradient(circle at 0 0, rgb(14 165 233 / 8%), transparent 34%),
+    radial-gradient(circle at 100% 100%, rgb(249 115 22 / 10%), transparent 36%);
 }
 
 .hero-gradient {
   background:
-    radial-gradient(circle at 10% 20%, rgb(242 101 34 / 24%) 0%, transparent 35%),
-    radial-gradient(circle at 90% 0%, rgb(20 35 45 / 16%) 0%, transparent 45%),
-    linear-gradient(125deg, #fffbf2 0%, #fce8cf 100%);
+    radial-gradient(circle at 10% 20%, rgb(14 165 233 / 26%) 0%, transparent 38%),
+    radial-gradient(circle at 90% 0%, rgb(249 115 22 / 20%) 0%, transparent 40%),
+    linear-gradient(125deg, #fdfdff 0%, #e8f7ff 42%, #fff0e6 100%);
+  border: 1px solid rgb(14 165 233 / 18%);
+  box-shadow: 0 25px 50px rgb(9 30 66 / 12%);
+  animation: liftIn 0.6s ease-out;
 }
 
 .card {
-  border: 1px solid rgb(0 0 0 / 10%);
+  border: 1px solid rgb(16 32 51 / 10%);
   background: var(--paper);
   border-radius: 1.5rem;
   padding: 1rem;
-  box-shadow: 0 18px 35px rgb(20 35 45 / 8%);
+  box-shadow: 0 18px 35px rgb(16 32 51 / 8%);
+  transition: transform 170ms ease, box-shadow 170ms ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 42px rgb(16 32 51 / 12%);
 }
 
 .input {
   width: 100%;
   border-radius: 0.9rem;
-  border: 1px solid rgb(0 0 0 / 16%);
+  border: 1px solid rgb(16 32 51 / 18%);
   background: white;
   padding: 0.7rem 0.9rem;
 }
 
 .input:focus {
-  outline: 2px solid color-mix(in srgb, var(--brand) 45%, transparent);
+  outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
   border-color: var(--brand);
 }
 
@@ -60,16 +74,17 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: var(--ink);
+  background: linear-gradient(110deg, var(--brand-strong), var(--accent));
   color: white;
   padding: 0.62rem 1rem;
   font-weight: 700;
-  transition: transform 150ms ease, opacity 150ms ease;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  box-shadow: 0 8px 20px rgb(2 132 199 / 30%);
 }
 
 .btn-primary:hover {
-  transform: translateY(-1px);
-  opacity: 0.92;
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 12px 25px rgb(2 132 199 / 40%);
 }
 
 .btn-secondary {
@@ -77,10 +92,21 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  border: 1px solid rgb(0 0 0 / 16%);
+  border: 1px solid rgb(16 32 51 / 18%);
   background: white;
   padding: 0.62rem 1rem;
   font-weight: 700;
+}
+
+@keyframes liftIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 640px) {

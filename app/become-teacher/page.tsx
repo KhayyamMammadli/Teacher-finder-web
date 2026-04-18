@@ -37,14 +37,14 @@ export default function BecomeTeacherPage() {
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-12 sm:px-6">
       <div className="card">
-        <h1 className="text-3xl font-bold">Become a Teacher</h1>
-        <p className="mt-2 text-sm text-[var(--ink-soft)]">Fill this form and we will contact you.</p>
+        <h1 className="text-3xl font-bold">Muellim muracieti</h1>
+        <p className="mt-2 text-sm text-[var(--ink-soft)]">Formu doldurun, qisa muddetde sizinle elaqe saxlayaq.</p>
 
         <form className="mt-5 space-y-3" onSubmit={onSubmit}>
-          <input className="input" name="name" placeholder="Name" required />
-          <input className="input" name="subjects" placeholder="Subjects (comma separated)" required />
-          <input className="input" name="experience" type="number" min="0" placeholder="Experience (years)" required />
-          <input className="input" name="price" type="number" min="0" placeholder="Price (AZN/hour)" required />
+          <input className="input" name="name" placeholder="Ad soyad" required />
+          <input className="input" name="subjects" placeholder="Fennler (vergulle ayirin)" required />
+          <input className="input" name="experience" type="number" min="0" placeholder="Tecrube (il)" required />
+          <input className="input" name="price" type="number" min="0" placeholder="Qiymet (AZN/saat)" required />
           <select className="input" name="location" required>
             {locationOptions.map((item) => (
               <option key={item} value={item}>
@@ -54,12 +54,12 @@ export default function BecomeTeacherPage() {
           </select>
 
           <button type="submit" className="btn-primary w-full" disabled={mutation.isPending}>
-            {mutation.isPending ? "Submitting..." : "Submit Application"}
+            {mutation.isPending ? "Gonderilir..." : "Muracieti gonder"}
           </button>
         </form>
 
-        {success && <p className="mt-3 text-sm text-green-700">{success}</p>}
-        {mutation.isError && <p className="mt-3 text-sm text-red-700">Submission failed.</p>}
+        {success && <p className="mt-3 text-sm text-green-700">Muraciet ugurla gonderildi.</p>}
+        {mutation.isError && <p className="mt-3 text-sm text-red-700">Muraciet ugursuz oldu.</p>}
       </div>
     </main>
   );

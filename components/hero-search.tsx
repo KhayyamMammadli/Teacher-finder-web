@@ -20,7 +20,7 @@ export function HeroSearch() {
           className="input"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
-          aria-label="Subject"
+          aria-label="Fenn"
         >
           {subjects.map((item) => (
             <option key={item} value={item}>
@@ -32,7 +32,7 @@ export function HeroSearch() {
           className="input"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-          aria-label="Location"
+          aria-label="Lokasiya"
         >
           {locationOptions.map((item) => (
             <option key={item} value={item}>
@@ -49,7 +49,7 @@ export function HeroSearch() {
             );
           }}
         >
-          Axtar
+          Muellim tap
         </button>
       </div>
     </div>

@@ -30,7 +30,7 @@ export default function ProfilePage() {
   const updateMutation = useMutation({
     mutationFn: (payload: { name: string; phone: string }) => updateMyProfile(token || "", payload),
     onSuccess: () => {
-      setMessage("Profile updated");
+      setMessage("Profil yenilendi");
       profileQuery.refetch();
     },
   });
@@ -50,8 +50,8 @@ export default function ProfilePage() {
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-12 sm:px-6">
       <div className="card">
-        <h1 className="text-3xl font-bold">Profile</h1>
-        <p className="mt-2 text-sm text-[var(--ink-soft)]">Edit your user information</p>
+        <h1 className="text-3xl font-bold">Profil</h1>
+        <p className="mt-2 text-sm text-[var(--ink-soft)]">Istifadeci melumatlarinizi yenileyin</p>
 
         {profile && (
           <form className="mt-5 space-y-3" onSubmit={onSubmit}>
@@ -60,13 +60,13 @@ export default function ProfilePage() {
             <input className="input bg-black/5" value={profile.email} disabled readOnly />
 
             <button className="btn-primary w-full" type="submit" disabled={updateMutation.isPending}>
-              {updateMutation.isPending ? "Saving..." : "Save changes"}
+              {updateMutation.isPending ? "Yaddasda saxlanir..." : "Yenilikleri saxla"}
             </button>
           </form>
         )}
 
-        {profileQuery.isLoading && <p className="mt-4 text-sm">Loading...</p>}
-        {profileQuery.isError && <p className="mt-4 text-sm text-red-700">Failed to load profile.</p>}
+        {profileQuery.isLoading && <p className="mt-4 text-sm">Yuklenir...</p>}
+        {profileQuery.isError && <p className="mt-4 text-sm text-red-700">Profil yuklenmedi.</p>}
         {message && <p className="mt-4 text-sm text-green-700">{message}</p>}
       </div>
     </main>

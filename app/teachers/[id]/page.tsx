@@ -20,14 +20,14 @@ export async function generateMetadata({
 
   if (!teacher) {
     return {
-      title: "Teacher not found",
-      description: "Requested teacher profile does not exist.",
+      title: "Muellim tapilmadi",
+      description: "Axtarilan muellim profili movcud deyil.",
     };
   }
 
   return {
-    title: `${teacher.name} | ${teacher.subject} Teacher`,
-    description: `${teacher.name} teaches ${teacher.subject} in ${teacher.location}. View profile and book a lesson.`,
+    title: `${teacher.name} | ${teacher.subject} muellimi`,
+    description: `${teacher.name} ${teacher.location} seherinde ${teacher.subject} dersi kecir. Profili inceleyin ve rezerv edin.`,
     openGraph: {
       title: `${teacher.name} - TeacherFinder`,
       description: teacher.bio,
@@ -56,19 +56,19 @@ export default async function TeacherDetailPage({
             <h1 className="text-3xl font-bold">{teacher.name}</h1>
             <p className="mt-2 text-[var(--ink-soft)]">{teacher.location}</p>
             <div className="mt-3 flex flex-wrap gap-3 text-sm">
-              <span>Rating {teacher.rating.toFixed(1)}</span>
+              <span>Reytinq {teacher.rating.toFixed(1)}</span>
               <span>{teacher.price} AZN / saat</span>
               <span>{teacher.experienceYears} il tecrube</span>
             </div>
           </div>
 
           <div className="card">
-            <h2 className="text-xl font-semibold">Bio</h2>
+            <h2 className="text-xl font-semibold">Haqqinda</h2>
             <p className="mt-2 text-[var(--ink-soft)]">{teacher.bio}</p>
           </div>
 
           <div className="card">
-            <h2 className="text-xl font-semibold">Subjects</h2>
+            <h2 className="text-xl font-semibold">Fennler</h2>
             <div className="mt-3 flex flex-wrap gap-2">
               {teacher.subjects.map((item) => (
                 <span key={item} className="rounded-full border border-black/10 bg-black/5 px-3 py-1 text-sm">
@@ -79,12 +79,12 @@ export default async function TeacherDetailPage({
           </div>
 
           <div className="card">
-            <h2 className="text-xl font-semibold">Reviews</h2>
+            <h2 className="text-xl font-semibold">Reyler</h2>
             <div className="mt-3 space-y-3">
               {teacher.reviews.map((review) => (
                 <article key={review.id} className="rounded-2xl border border-black/10 bg-white p-3">
                   <p className="font-semibold">{review.user}</p>
-                  <p className="text-sm text-[var(--ink-soft)]">Rating {review.rating.toFixed(1)}</p>
+                  <p className="text-sm text-[var(--ink-soft)]">Reytinq {review.rating.toFixed(1)}</p>
                   <p className="mt-1 text-sm">{review.comment}</p>
                 </article>
               ))}

@@ -6,8 +6,8 @@ import { locationCoords, locationOptions } from "@/lib/locations";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Teachers",
-  description: "Filter tutors by subject, location, rating, and price.",
+  title: "Muellimler",
+  description: "Fenn, lokasiya, reytinq ve qiymete gore muellimleri filterleyin.",
 };
 
 export default async function TeachersPage({
@@ -37,16 +37,16 @@ export default async function TeachersPage({
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
-      <h1 className="text-3xl font-bold">Teachers List</h1>
-      <p className="mt-2 text-sm text-[var(--ink-soft)]">{total} teacher found</p>
+      <h1 className="text-3xl font-bold">Muellim siyahisi</h1>
+      <p className="mt-2 text-sm text-[var(--ink-soft)]">{total} muellim tapildi</p>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[280px_1fr]">
         <aside className="card h-max">
-          <h2 className="text-lg font-semibold">Filters</h2>
+          <h2 className="text-lg font-semibold">Filterler</h2>
           <form className="mt-4 space-y-3" method="GET">
-            <input name="subject" className="input" placeholder="Subject" defaultValue={String(params.subject || "")} />
+            <input name="subject" className="input" placeholder="Fenn" defaultValue={String(params.subject || "")} />
             <select name="location" className="input" defaultValue={String(params.location || "") || ""}>
-              <option value="">All locations</option>
+              <option value="">Butun lokasiyalar</option>
               {locationOptions.map((item) => (
                 <option key={item} value={item}>
                   {item}
@@ -58,14 +58,14 @@ export default async function TeachersPage({
                 name="minPrice"
                 type="number"
                 className="input"
-                placeholder="Min"
+                placeholder="Min qiymet"
                 defaultValue={String(params.minPrice || "")}
               />
               <input
                 name="maxPrice"
                 type="number"
                 className="input"
-                placeholder="Max"
+                placeholder="Maks qiymet"
                 defaultValue={String(params.maxPrice || "")}
               />
             </div>
@@ -76,11 +76,11 @@ export default async function TeachersPage({
               min="0"
               max="5"
               className="input"
-              placeholder="Min rating"
+              placeholder="Min reytinq"
               defaultValue={String(params.rating || "")}
             />
             <button type="submit" className="btn-primary w-full">
-              Apply Filters
+              Filterle
             </button>
           </form>
         </aside>
@@ -89,7 +89,7 @@ export default async function TeachersPage({
           {items.map((teacher) => (
             <TeacherCard key={teacher.id} teacher={teacher} />
           ))}
-          {!items.length && <p>No teacher matches this filter.</p>}
+          {!items.length && <p>Bu filtere uygun muellim tapilmadi.</p>}
         </section>
       </div>
     </main>
