@@ -2,11 +2,19 @@ import type { Teacher } from "./types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5050";
 
+async function safeFetch(url: string, init?: RequestInit) {
+  try {
+    return await fetch(url, init);
+  } catch {
+    return null;
+  }
+}
+
 export async function serverGetPopularSubjects() {
-  const response = await fetch(`${API_BASE_URL}/api/teachers/subjects/popular`, {
+  const response = await safeFetch(`${API_BASE_URL}/api/teachers/subjects/popular`, {
     cache: "no-store",
   });
-  if (!response.ok) {
+  if (!response || !response.ok) {
     return [] as string[];
   }
   const data = (await response.json()) as { items: string[] };
@@ -14,10 +22,10 @@ export async function serverGetPopularSubjects() {
 }
 
 export async function serverGetTopTeachers() {
-  const response = await fetch(`${API_BASE_URL}/api/teachers/top`, {
+  const response = await safeFetch(`${API_BASE_URL}/api/teachers/top`, {
     cache: "no-store",
   });
-  if (!response.ok) {
+  if (!response || !response.ok) {
     return [] as Teacher[];
   }
   const data = (await response.json()) as { items: Teacher[] };
@@ -25,21 +33,21 @@ export async function serverGetTopTeachers() {
 }
 
 export async function serverGetTeachers(query: URLSearchParams) {
-  const response = await fetch(`${API_BASE_URL}/api/teachers?${query.toString()}`, {
+  const response = await safeFetch(`${API_BASE_URL}/api/teachers?${query.toString()}`, {
     cache: "no-store",
   });
-  if (!response.ok) {
+  if (!response || !response.ok) {
     return { items: [] as Teacher[], total: 0 };
   }
   return (await response.json()) as { items: Teacher[]; total: number };
 }
 
 export async function serverGetTeacher(id: string, nextRevalidate?: number) {
-  const response = await fetch(`${API_BASE_URL}/api/teachers/${id}`, {
+  const response = await safeFetch(`${API_BASE_URL}/api/teachers/${id}`, {
     next: nextRevalidate ? { revalidate: nextRevalidate } : undefined,
   });
 
-  if (!response.ok) {
+  if (!response || !response.ok) {
     return null;
   }
 
