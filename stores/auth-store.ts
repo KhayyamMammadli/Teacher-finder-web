@@ -12,8 +12,8 @@ interface AuthState {
   clearAuth: () => void;
 }
 
-const TOKEN_KEY = "tf_token";
-const USER_KEY = "tf_user";
+const TOKEN_KEY = "az_token";
+const USER_KEY = "az_user";
 
 export const useAuthStore = create<AuthState>((set) => ({
   token: null,
@@ -33,7 +33,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem(TOKEN_KEY, token);
       localStorage.setItem(USER_KEY, JSON.stringify(user));
-      document.cookie = `tf_token=${token}; path=/; max-age=604800; samesite=lax`;
+      document.cookie = `az_token=${token}; path=/; max-age=604800; samesite=lax`;
     }
     set({ token, user, ready: true });
   },
@@ -41,7 +41,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (typeof window !== "undefined") {
       localStorage.removeItem(TOKEN_KEY);
       localStorage.removeItem(USER_KEY);
-      document.cookie = "tf_token=; path=/; max-age=0; samesite=lax";
+      document.cookie = "az_token=; path=/; max-age=0; samesite=lax";
     }
     set({ token: null, user: null, ready: true });
   },

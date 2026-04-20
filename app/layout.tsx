@@ -17,15 +17,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: {
-    default: "TeacherFinder | Azerbaycanda muellim axtar",
-    template: "%s | TeacherFinder",
+    default: "AzStore | Azərbaycan Instagram Marketplace",
+    template: "%s | AzStore",
   },
   description:
-    "Fenn, qiymet, reytinq ve lokasiyaya gore muellim tapin. Profilleri muqayise edin ve tez rezerv edin.",
+    "Azərbaycanın Instagram mağazalarını bir platformada tap. Geyim, kosmetika, elektronika — filtrlə, axtar, WhatsApp ilə sifariş ver.",
   openGraph: {
-    title: "TeacherFinder",
-    description:
-      "Fenn, qiymet, reytinq ve lokasiyaya gore muellim tapin. Profilleri muqayise edin ve tez rezerv edin.",
+    title: "AzStore",
+    description: "Azərbaycanın Instagram mağazaları bir yerdə",
     type: "website",
     locale: "az_AZ",
   },
@@ -46,8 +45,10 @@ export default function RootLayout({
           <div className="relative flex min-h-screen flex-col">
             <SiteHeader />
             <div className="flex-1">{children}</div>
-            <footer className="border-t border-black/10 px-4 py-8 text-center text-sm text-[var(--ink-soft)] sm:px-6">
-              TeacherFinder - SEO trafiki rezervasiya cevirmesine yonelen platforma.
+              <footer className="border-t border-black/10 px-4 py-8 text-center text-sm text-[var(--ink-soft)] sm:px-6">
+              AzStore © 2026 — Azərbaycanın Instagram mağazaları bir yerdə.
+              <span className="mx-3">·</span>
+              <a href="/register-shop" className="text-[var(--brand-strong)] hover:underline">Mağaza aç</a>
             </footer>
           </div>
         </Providers>

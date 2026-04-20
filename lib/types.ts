@@ -1,25 +1,56 @@
-export type UserRole = "student" | "teacher";
+export type UserRole = "customer" | "shop_owner" | "admin";
 
-export interface TeacherReview {
+export interface Product {
   id: string;
-  user: string;
-  comment: string;
-  rating: number;
+  shopId: string;
+  name: string;
+  description: string | null;
+  price: number | null;
+  category: string | null;
+  imageUrl: string | null;
+  isAvailable: boolean;
+  createdAt: string;
+  // joined
+  shopName?: string;
+  instagramUrl?: string | null;
+  whatsapp?: string | null;
+  shopLocation?: string | null;
 }
 
-export interface Teacher {
+export interface Shop {
   id: string;
+  ownerId: string;
   name: string;
-  image: string;
-  subject: string;
-  subjects: string[];
-  rating: number;
-  price: number;
-  location: string;
-  experienceYears: number;
-  bio: string;
-  reviews: TeacherReview[];
-  distanceKm?: number | null;
+  slug: string | null;
+  description: string | null;
+  category: string;
+  instagramUrl: string | null;
+  whatsapp: string | null;
+  logoUrl: string | null;
+  coverUrl: string | null;
+  location: string | null;
+  deliveryInfo: string | null;
+  isFeatured: boolean;
+  isActive: boolean;
+  createdAt: string;
+  productCount?: number;
+  products?: Product[];
+}
+
+export type OrderStatus = "new" | "processing" | "shipped" | "delivered" | "cancelled";
+
+export interface Order {
+  id: string;
+  shopId: string;
+  productId: string | null;
+  productName: string | null;
+  customerName: string;
+  customerPhone: string | null;
+  customerInstagram: string | null;
+  note: string | null;
+  status: OrderStatus;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AuthUser {
@@ -28,16 +59,9 @@ export interface AuthUser {
   name: string;
   email: string;
   phone?: string;
-  teacherId?: string;
-}
-
-export interface Booking {
-  id: string;
-  studentId: string;
-  teacherId: string;
-  note: string;
-  status: "pending" | "accepted" | "rejected";
-  createdAt: string;
+  authProvider?: string | null;
+  instagramUsername?: string | null;
+  profileImageUrl?: string | null;
 }
 
 export interface Profile {
@@ -46,5 +70,4 @@ export interface Profile {
   name: string;
   email: string;
   phone: string;
-  teacherId?: string;
 }

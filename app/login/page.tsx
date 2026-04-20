@@ -1,186 +1,144 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { login, sendRegisterOtp, verifyRegisterOtp } from "@/lib/api";
+import { exchangeInstagramAuthCode, getInstagramLoginUrl, login } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth-store";
 
 export default function LoginPage() {
   const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
-  const [mode, setMode] = useState<"login" | "register">("login");
-  const [registerData, setRegisterData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    phone: "",
-    role: "student" as "student" | "teacher",
-  });
-  const [otpCode, setOtpCode] = useState("");
-  const [otpStep, setOtpStep] = useState(false);
-  const [devOtp, setDevOtp] = useState("");
+  const [adminMode, setAdminMode] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [authCode, setAuthCode] = useState<string | null>(null);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const loginMutation = useMutation({
-    mutationFn: async (payload: {
-      email: string;
-      password: string;
-    }) => {
-      return login(payload.email, payload.password);
-    },
+    mutationFn: async (payload: { email: string; password: string }) => login(payload.email, payload.password),
     onSuccess: (data) => {
       setAuth(data.token, data.user);
       router.push("/dashboard");
     },
     onError: () => {
-      setError("Email ve ya sifre sehvdir.");
+      setError("Admin email ve ya sifre sehvdir.");
     },
   });
 
-  const sendOtpMutation = useMutation({
-    mutationFn: async (email: string) => sendRegisterOtp(email),
+  const exchangeMutation = useMutation({
+    mutationFn: async (code: string) => exchangeInstagramAuthCode(code),
     onSuccess: (data) => {
-      setOtpStep(true);
-      setSuccess("OTP kod emailinize gonderildi.");
-      setDevOtp(data.devOtp || "");
+      setAuth(data.token, data.user);
+      router.replace("/dashboard");
     },
-    onError: () => {
-      setError("OTP gonderilemedi. Emaili yoxlayin.");
-    },
-  });
-
-  const verifyOtpMutation = useMutation({
-    mutationFn: () => verifyRegisterOtp({ ...registerData, otp: otpCode }),
-    onSuccess: (data) => {
-      if ("token" in data) {
-        setAuth(data.token, data.user);
-        router.push("/dashboard");
-        return;
-      }
-
-      setOtpStep(false);
-      setOtpCode("");
-      setMode("login");
-      setSuccess(data.message || "Muellim muracietiniz admin tesdiqine gonderildi.");
-    },
-    onError: () => {
-      setError("OTP yanlisdir ve ya vaxti bitib.");
+    onError: (mutationError) => {
+      setError(mutationError instanceof Error ? mutationError.message : "Instagram login ugursuz oldu.");
+      router.replace("/login");
     },
   });
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setAuthCode(params.get("auth_code"));
+    setAuthError(params.get("auth_error"));
+  }, []);
+
+  useEffect(() => {
+    if (authError) {
+      setError(authError);
+      router.replace("/login");
+    }
+  }, [authError, router]);
+
+  useEffect(() => {
+    if (authCode && !exchangeMutation.isPending && !exchangeMutation.isSuccess) {
+      exchangeMutation.mutate(authCode);
+    }
+  }, [authCode, exchangeMutation]);
+
+  async function startInstagramLogin() {
+    setError("");
+    setSuccess("");
+    try {
+      const url = await getInstagramLoginUrl("seller-login");
+      window.location.href = url;
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "Instagram login baslamadi.");
+    }
+  }
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
     setSuccess("");
 
     const formData = new FormData(event.currentTarget);
-
-    if (mode === "login") {
-      loginMutation.mutate({
-        email: String(formData.get("email") || ""),
-        password: String(formData.get("password") || ""),
-      });
-      return;
-    }
-
-    if (!otpStep) {
-      const nextRegisterData = {
-        name: String(formData.get("name") || ""),
-        email: String(formData.get("email") || ""),
-        password: String(formData.get("password") || ""),
-        role: String(formData.get("role") || "student") as "student" | "teacher",
-        phone: String(formData.get("phone") || ""),
-      };
-      setRegisterData(nextRegisterData);
-      sendOtpMutation.mutate(nextRegisterData.email);
-      return;
-    }
-
-    verifyOtpMutation.mutate();
+    loginMutation.mutate({
+      email: String(formData.get("email") || ""),
+      password: String(formData.get("password") || ""),
+    });
   }
 
   return (
-    <main className="mx-auto w-full max-w-xl px-4 py-12 sm:px-6">
-      <div className="card border-[var(--brand)]/20">
-        <div className="mb-5 flex gap-2">
+    <main className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
+      <div className="grid gap-6 lg:grid-cols-[1.3fr,0.9fr]">
+        <section className="card border-[var(--brand)]/20 p-6 sm:p-8">
+          <p className="mb-3 inline-flex rounded-full border border-[var(--brand)]/20 bg-[var(--brand)]/5 px-3 py-1 text-xs font-semibold text-[var(--brand-strong)]">
+            Satıcı girişi
+          </p>
+          <h1 className="text-3xl font-black tracking-tight">Instagram ilə başla</h1>
+          <p className="mt-3 text-sm leading-6 text-[var(--ink-soft)]">
+            Satıcı ayrıca hesab yaratmır. Instagram Business hesabı ilə daxil olur, sonra mağaza məlumatlarını bir dəfə tamamlayır.
+          </p>
+
+          <div className="mt-6 rounded-2xl border border-black/10 bg-black/[0.02] p-4 text-sm text-[var(--ink-soft)]">
+            <p className="font-semibold text-[var(--ink)]">Nə lazımdır?</p>
+            <p className="mt-2">Instagram Business və ya Creator hesabı Facebook Page ilə bağlı olmalıdır.</p>
+          </div>
+
           <button
             type="button"
-            onClick={() => {
-              setMode("login");
-              setOtpStep(false);
-              setError("");
-              setSuccess("");
-            }}
-            className={mode === "login" ? "btn-primary" : "btn-secondary"}
+            onClick={startInstagramLogin}
+            disabled={exchangeMutation.isPending}
+            className="btn-primary mt-6 flex w-full items-center justify-center gap-2 py-3 text-base"
           >
-            Daxil ol
+            {exchangeMutation.isPending ? "Daxil olunur..." : "Instagram ilə daxil ol"}
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMode("register");
-              setOtpStep(false);
-              setError("");
-              setSuccess("");
-            }}
-            className={mode === "register" ? "btn-primary" : "btn-secondary"}
-          >
-            Qeydiyyat
-          </button>
-        </div>
 
-        <form className="space-y-3" onSubmit={onSubmit}>
-          {mode === "register" && !otpStep && (
-            <>
-              <input className="input" name="name" placeholder="Ad ve soyad" required />
-              <input className="input" name="phone" placeholder="Telefon (optional)" />
-              <select className="input" name="role" defaultValue="student">
-                <option value="student">Telebe</option>
-                <option value="teacher">Muellim</option>
-              </select>
-            </>
+          <p className="mt-3 text-xs text-[var(--ink-soft)]">
+            Sistem Instagram hesabınızı tanıyıb satıcı profilinizi avtomatik yaradır.
+          </p>
+
+          {success && <p className="mt-4 text-sm text-green-700">{success}</p>}
+          {error && <p className="mt-4 text-sm text-red-700">{error}</p>}
+        </section>
+
+        <aside className="card p-6 sm:p-8">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-bold">Admin girişi</h2>
+              <p className="text-xs text-[var(--ink-soft)]">Admin panel yalnız email və şifrə ilə qalır.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setAdminMode((current) => !current)}
+              className="btn-secondary px-4 py-2 text-xs"
+            >
+              {adminMode ? "Gizlət" : "Aç"}
+            </button>
+          </div>
+
+          {adminMode && (
+            <form className="mt-5 space-y-3" onSubmit={onSubmit}>
+              <input className="input" name="email" type="email" placeholder="Admin email" required />
+              <input className="input" name="password" type="password" placeholder="Şifrə" required />
+              <button className="btn-primary w-full" type="submit" disabled={loginMutation.isPending}>
+                {loginMutation.isPending ? "Gözləyin..." : "Admin daxil ol"}
+              </button>
+            </form>
           )}
-
-          {mode === "register" && otpStep ? (
-            <>
-              <input className="input bg-black/5" value={registerData.email} disabled readOnly />
-              <input
-                className="input"
-                value={otpCode}
-                onChange={(e) => setOtpCode(e.target.value)}
-                placeholder="Email OTP kodu"
-                maxLength={6}
-                required
-              />
-            </>
-          ) : (
-            <>
-              <input className="input" name="email" type="email" placeholder="Email" required />
-              <input className="input" name="password" type="password" placeholder="Sifre" required />
-            </>
-          )}
-
-          <button
-            className="btn-primary w-full"
-            type="submit"
-            disabled={loginMutation.isPending || sendOtpMutation.isPending || verifyOtpMutation.isPending}
-          >
-            {loginMutation.isPending || sendOtpMutation.isPending || verifyOtpMutation.isPending
-              ? "Gozleyin..."
-              : mode === "login"
-                ? "Daxil ol"
-                : otpStep
-                  ? "Qeydiyyati tamamla"
-                  : "OTP gonder"}
-          </button>
-
-          {success && <p className="text-sm text-green-700">{success}</p>}
-          {error && <p className="text-sm text-red-700">{error}</p>}
-          {devOtp && <p className="text-xs text-[var(--ink-soft)]">DEV OTP: {devOtp}</p>}
-          <p className="text-xs text-[var(--ink-soft)]">Demo login: student@example.com / 123456</p>
-        </form>
+        </aside>
       </div>
     </main>
   );

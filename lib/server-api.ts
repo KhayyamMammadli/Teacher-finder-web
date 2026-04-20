@@ -1,4 +1,4 @@
-import type { Teacher } from "./types";
+import type { Shop, Product } from "./types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5050";
 
@@ -10,46 +10,28 @@ async function safeFetch(url: string, init?: RequestInit) {
   }
 }
 
-export async function serverGetPopularSubjects() {
-  const response = await safeFetch(`${API_BASE_URL}/api/teachers/subjects/popular`, {
-    cache: "no-store",
-  });
-  if (!response || !response.ok) {
-    return [] as string[];
-  }
-  const data = (await response.json()) as { items: string[] };
-  return data.items;
+export async function serverGetFeaturedShops() {
+  const response = await safeFetch(`${API_BASE_URL}/api/shops?featured=true&limit=6`, { cache: "no-store" });
+  if (!response || !response.ok) return [] as Shop[];
+  return (await response.json()) as Shop[];
 }
 
-export async function serverGetTopTeachers() {
-  const response = await safeFetch(`${API_BASE_URL}/api/teachers/top`, {
-    cache: "no-store",
-  });
-  if (!response || !response.ok) {
-    return [] as Teacher[];
-  }
-  const data = (await response.json()) as { items: Teacher[] };
-  return data.items;
+export async function serverGetShops(params?: URLSearchParams) {
+  const qs = params ? `?${params.toString()}` : "";
+  const response = await safeFetch(`${API_BASE_URL}/api/shops${qs}`, { cache: "no-store" });
+  if (!response || !response.ok) return [] as Shop[];
+  return (await response.json()) as Shop[];
 }
 
-export async function serverGetTeachers(query: URLSearchParams) {
-  const response = await safeFetch(`${API_BASE_URL}/api/teachers?${query.toString()}`, {
-    cache: "no-store",
-  });
-  if (!response || !response.ok) {
-    return { items: [] as Teacher[], total: 0 };
-  }
-  return (await response.json()) as { items: Teacher[]; total: number };
+export async function serverGetShop(id: string) {
+  const response = await safeFetch(`${API_BASE_URL}/api/shops/${id}`, { cache: "no-store" });
+  if (!response || !response.ok) return null;
+  return (await response.json()) as Shop;
 }
 
-export async function serverGetTeacher(id: string, nextRevalidate?: number) {
-  const response = await safeFetch(`${API_BASE_URL}/api/teachers/${id}`, {
-    next: nextRevalidate ? { revalidate: nextRevalidate } : undefined,
-  });
-
-  if (!response || !response.ok) {
-    return null;
-  }
-
-  return (await response.json()) as Teacher;
+export async function serverSearchProducts(params?: URLSearchParams) {
+  const qs = params ? `?${params.toString()}` : "";
+  const response = await safeFetch(`${API_BASE_URL}/api/shops/products/search${qs}`, { cache: "no-store" });
+  if (!response || !response.ok) return [] as Product[];
+  return (await response.json()) as Product[];
 }

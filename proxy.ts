@@ -11,7 +11,7 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get("tf_token")?.value;
+  const token = request.cookies.get("az_token")?.value;
   if (!token) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
