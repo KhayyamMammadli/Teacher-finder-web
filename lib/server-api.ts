@@ -1,6 +1,6 @@
 import type { Shop, Product } from "./types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5050";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://teacher-finder-backend.onrender.com";
 
 async function safeFetch(url: string, init?: RequestInit) {
   try {
